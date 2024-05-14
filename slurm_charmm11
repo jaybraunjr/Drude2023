@@ -1,0 +1,33 @@
+#!/bin/bash
+#SBATCH --time=0-40:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=5
+#SBATCH --job-name=charmm
+#SBATCH --out=vel_test11.out
+#SBATCH --gres=gpu:2080ti:1
+
+#SBATCH --account=swanson-gpu-np
+#SBATCH --partition=swanson-gpu-np
+# Working Directory, input & output
+export WORK_DIR=PATH_TO_YOUR_FOLDER_ON_SCRATCH
+
+module load gcc/8.5.0  openmpi/4.1.1
+module load charmm/46b2
+
+# Check if FILENUM has been set externally; use a default value if not
+export FILENUM=${FILENUM:-180}
+
+
+# Temporarily replace @FILENUM in the original inp_vel.inp file
+sed -i.bak "s/@FILENUM/${FILENUM}/g" inp_vel11.inp
+
+# Run CHARMM with the original (now modified) input file
+charmm < inp_vel11.inp > out/output_${FILENUM}.out
+
+# Revert changes by restoring the backup file
+mv inp_vel11.inp.bak inp_vel11.inp
+
+
+
+

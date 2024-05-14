@@ -198,8 +198,6 @@ for line in trio_psf_snippet.strip().split('\n'):
 
 trio_psf_dict
 
-# Assuming your complete dictionary is named trio_psf_dict
-
 # Step 1: Read "save.psf"
 with open('save.psf', 'r') as file:
     save_psf_lines = file.readlines()

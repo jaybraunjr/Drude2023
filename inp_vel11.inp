@@ -1,0 +1,77 @@
+*
+
+stream init.str
+
+faster off
+
+!update -
+!  atom cdie fshift vatom vswitch cutnb 14.0  ctofnb 10.0 ctonnb 10. -
+!  wmin 1.5  eps 1.0 inbfrq -1 cutim 14.0 imgfrq -1 -
+!  ewald pme spline order 6 kappa 0.34 fftx @FXY ffty @FXY fftz @FZ -
+!  ljpme dorder 4 dkappa 0.34 dftx @FXY dfty @FXY dftz @FZ
+
+update -
+  atom cdie fshift vatom vswitch cutnb 14.0  ctofnb 10.0 ctonnb 10. -
+  wmin 1.5  eps 1.0 inbfrq -1 cutim 14.0 imgfrq -1 -
+  ewald pme spline order 6 kappa 0.34 fftx @FXY ffty @FXY fftz @FZ
+
+
+SHAKE bonh param - ! tolerance 1.0e-9 -
+      fast water SWM4 -
+      select  .not. type D*  end -
+      select  .not. type D*  end
+
+tpcontrol nther 2  nstep 50 -
+    iupten 61 -
+    ther 1  tref 300  tau  0.1    SELECT .NOT. TYPE D* END  -
+    ther 2  tref   1.00  tau  0.005  SELECT TYPE D* END 
+
+DrudeHardWall L_WALL 0.2 ! set the hard wall at 0.2 Angstrom
+
+!bomlev -3
+
+! TIMFAC=4.88882129D-02 (from CHARMM SOURCE CODE)
+set tf = 0.0488882129
+
+open unit 61 write card name ptn2/nsone@FILENUM.ptn
+set k = 1
+! read first frame, after getting number of frames (NFILE)
+open unit 101 read file name "../trajs2/@FILENUM.dcd"
+traj query unit 101
+rewind unit 101
+set fin = ?NFILE
+open unit 102 read file name "../vel2/@FILENUM.dcd"
+read coor file ifile @K unit 101
+read coor comp file ifile @K unit 102
+! convert vel to AKMA
+scalar xcomp mult @TF sele all end
+scalar ycomp mult @TF sele all end
+scalar zcomp mult @TF sele all end
+
+label frameloop
+
+!prnlev 3 node 0
+dyna vv2 strt nstep 1 time 0.001 ntrfrq 5000 -
+     iprfrq 1000 nprint 1  -
+     iasvel 0 firstt 300 finalt 300 -
+     iunread -1 iunwrite -1 iuncrd -1 iunvel -1 kunit -1 -
+     nsavc 0 nsavv 0
+incr k by 1
+if k le @FIN then
+ ! append to file
+ open unit 61 append card name ptn2/nsone@FILENUM.ptn
+ ! ifile -1 reads the next frame
+ read coor file ifile -1 unit 101
+ read coor comp file ifile -1 unit 102
+ scalar xcomp mult @TF sele all end
+ scalar ycomp mult @TF sele all end
+ scalar zcomp mult @TF sele all end
+ goto frameloop
+else
+ goto done
+endif
+
+label done
+
+stop
+
