@@ -1,14 +1,15 @@
 # Under development for easy use. 
 * Need to clean and streamline Jupyter notebooks
+  
 
 ###  Files Overview
 
 This repository includes all necessary files to compute surface tension from molecular dynamics simulations.
 
 - **`lipid_drude.str`**  
-  CHARMM topology stream file containing force field parameters for the lipid system (Drude polarizable model).
+  Ctopology stream file containing force field parameters for the lipids (Drude polarizable model). TG is included.
 
-- **Other files (`.inp`, `.py`, `.sh`, `.ipynb`)**  
+- **Other files**  
   Scripts and inputs used to:
   - Run CHARMM simulations  
   - Extract pressure tensor components  
@@ -18,3 +19,5 @@ This repository includes all necessary files to compute surface tension from mol
 Surface tension is computed using the standard formula:
 
 `γ = (Lz / 2) × [Pzz − (Pxx + Pyy)/2]`
+
+* Will soon include GMX to CHARMM scripts
