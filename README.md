@@ -4,10 +4,8 @@
 
 ###  Files Overview
 
-This repository includes all necessary files to compute surface tension from molecular dynamics simulations.
-
 - **`lipid_drude.str`**  
-  Ctopology stream file containing force field parameters for the lipids (Drude polarizable model). TG is included.
+  topology stream file containing force field parameters for the lipids (Drude polarizable model). TG is included.
 
 - **Other files**  
   Scripts and inputs used to:
