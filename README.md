@@ -4,8 +4,8 @@
 
 ###  Files Overview
 
-- **`lipid_drude.str`**  
-  topology stream file containing force field parameters for the lipids (Drude polarizable model). TG is included.
+- **`TRIO.str`**  
+  topology stream file containing force field parameters for the triacylglycerol.
 
 - **Other files**  
   Scripts and inputs used to:
